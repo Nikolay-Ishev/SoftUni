@@ -1,0 +1,7 @@
+{"id": 1, "name": "apples", "img_path": "apple.jpg", "count": 97}
+{"id": 2, "name": "carrots", "img_path": "carrot.jpg", "count": 97}
+{"id": 3, "name": "cucumbers", "img_path": "cucumber.jpg", "count": 97}
+
+
+
+
