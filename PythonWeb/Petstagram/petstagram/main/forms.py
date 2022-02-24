@@ -1,0 +1,150 @@
+from datetime import datetime
+
+from django import forms
+
+from petstagram.main.helpers import BootstrapFormMixin, DisabledFieldsFormMixin
+from petstagram.main.models import Profile, PetPhoto, Pet
+
+
+class CreateProfileForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'picture',)
+        widgets = {
+            'first_name': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter first name',
+                }
+            ),
+            'last_name': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter last name',
+                }
+            ),
+            'picture': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter URL',
+                }
+            ),
+        }
+
+
+class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self.initial['gender'] = Profile.DO_NOT_SHOW
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        widgets = {
+            'first_name': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter first name',
+                }
+            ),
+            'last_name': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter last name',
+                }
+            ),
+            'date_of_birth': forms.SelectDateWidget(
+                years=range(1920, datetime.now().year)
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'placeholder': 'Enter email',
+                }
+            ),
+            'picture': forms.TextInput(
+                attrs={
+                    # 'class': 'form-control',
+                    'placeholder': 'Enter URL',
+                }
+            ),
+
+            'description': forms.Textarea(
+                attrs={
+                    'placeholder': 'Enter description',
+                    'rows': 3
+                }
+            ),
+
+        }
+
+
+class DeleteProfileForm(forms.ModelForm):
+    # overwriting the save method in order to delete the form, (look in profile_action view)
+    def save(self, commit=True):
+        # delete pet photos
+        pets = list(self.instance.pet_set.all())
+        pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets)
+        pet_photos.delete()
+
+        # delete profile
+        self.instance.delete()
+        return self.instance
+
+    class Meta:
+        model = Profile
+        fields = ()
+        # exclude = ('first_name', 'last_name', 'picture', 'date_of_birth', 'description', 'gender')
+
+
+class CreatePetForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        fields = ('name', 'type', 'date_of_birth')
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'placeholder': 'Enter pet name'
+                }
+            ),
+        }
+
+
+class EditPetForm(forms.ModelForm, BootstrapFormMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        exclude = ('user_profile',)
+        fields = "__all__"
+        widgets = {
+            'date_of_birth': forms.SelectDateWidget(
+                years=range(1920, datetime.now().year + 1)
+            ),
+        }
+
+
+class DeletePetForm(forms.ModelForm, BootstrapFormMixin, DisabledFieldsFormMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self._init_disabled_fields()
+
+    def save(self, commit=True):
+        self.instance.delete()
+        return self.instance
+
+    class Meta:
+        model = Pet
+        exclude = ('user_profile',)
+        fields = "__all__"
