@@ -73,7 +73,11 @@ class Profile(models.Model):
         choices=GENDERS,
         null=True,
         blank=True,
+        default=DO_NOT_SHOW
     )
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 '''
@@ -118,10 +122,16 @@ class Pet(models.Model):
 
     @property
     def age(self):
-        return datetime.datetime.now().year - self.date_of_birth.year
+        if self.date_of_birth:
+            today = datetime.date.today()
+            return today.year - self.date_of_birth.year - ((today.month, today.day) <
+                                                           (self.date_of_birth.month, self.date_of_birth.day))
 
     class Meta:
         unique_together = ('name', 'user_profile')
+
+    def __str__(self):
+        return self.name
 
 
 '''
@@ -147,7 +157,7 @@ class PetPhoto(models.Model):
     )
     tagged_pets = models.ManyToManyField(
         Pet,
-        #validate at least one pet
+        # validate at least one pet
     )
 
     description = models.TextField(
