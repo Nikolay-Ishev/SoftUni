@@ -7,6 +7,8 @@ from petstagram.main.models import PetPhoto, Pet, Profile
 
 def show_profile(request):
     profile = get_profile()
+    if not profile:
+        return redirect('error 401')
     pets = list(Pet.objects.filter(user_profile=profile))
 
     pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets).distinct()
@@ -54,6 +56,8 @@ def show_profile(request):
 
 # template for profile action
 def profile_action(request, form_class, success_url, instance, template_name):
+    if not instance:
+        return redirect('error 401')
     if request.method == 'POST':
         form = form_class(request.POST, instance=instance)
         if form.is_valid():
@@ -77,3 +81,4 @@ def edit_profile(request):
 
 def delete_profile(request):
     return profile_action(request, DeleteProfileForm, 'index', get_profile(), 'profile_delete.html')
+

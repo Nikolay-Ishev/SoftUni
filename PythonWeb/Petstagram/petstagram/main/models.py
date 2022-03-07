@@ -4,7 +4,7 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 
 # Create your models here.
-from petstagram.main.validators import validate_letters_only, validate_file_max_mb_size
+from petstagram.main.validators import validate_letters_only, ValidateMaxFileSizeInMB
 
 '''
 Profile
@@ -30,7 +30,7 @@ class Profile(models.Model):
 
     MALE = 'Male'
     FEMALE = 'Female'
-    DO_NOT_SHOW = 'Do no show'
+    DO_NOT_SHOW = 'Do not show'
     GENDERS = [(x, x) for x in (MALE, FEMALE, DO_NOT_SHOW)]
     # GENDERS = [('Male', 'Male'), ('Female', 'Female'), ('Do not show', 'Do not show')]
 
@@ -150,9 +150,14 @@ Other:
 
 
 class PetPhoto(models.Model):
+    IMAGE_UPLOAD_TO_DIR = 'pet_photos/'
+    DEFAULT_LIKES = 0
+    IMAGE_MB_MAX_SIZE = 1
+
     photo = models.ImageField(
+        upload_to=IMAGE_UPLOAD_TO_DIR,
         validators=(
-            validate_file_max_mb_size,
+            ValidateMaxFileSizeInMB(IMAGE_MB_MAX_SIZE),
         )
     )
     tagged_pets = models.ManyToManyField(
@@ -170,5 +175,10 @@ class PetPhoto(models.Model):
     )
 
     likes = models.IntegerField(
-        default=0,
+        default=DEFAULT_LIKES,
+    )
+
+    user_profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE
     )

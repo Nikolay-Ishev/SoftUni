@@ -8,7 +8,7 @@ from petstagram.main.models import Pet
 
 def pet_action(request, form_class, success_url, instance, template_name):
     if request.method == 'POST':
-        form = form_class(request.POST, instance=instance)
+        form = form_class(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
             return redirect(success_url)

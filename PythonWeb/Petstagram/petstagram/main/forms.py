@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django import forms
@@ -86,10 +87,13 @@ class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
 class DeleteProfileForm(forms.ModelForm):
     # overwriting the save method in order to delete the form, (look in profile_action view)
     def save(self, commit=True):
-        # delete pet photos
-        pets = list(self.instance.pet_set.all())
-        pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets)
-        pet_photos.delete()
+        # # delete pet photos without foreign key in the model
+        pets_photos = list(self.instance.petphoto_set.all())
+        for ph in pets_photos:
+            image_path = ph.photo.path
+            os.remove(image_path)
+        # pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets)
+        # pet_photos.delete()
 
         # delete profile
         self.instance.delete()
@@ -148,3 +152,51 @@ class DeletePetForm(forms.ModelForm, BootstrapFormMixin, DisabledFieldsFormMixin
         model = Pet
         exclude = ('user_profile',)
         fields = "__all__"
+
+
+class CreatePetPhotoForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = PetPhoto
+        fields = ('photo', 'description', 'tagged_pets')
+        widgets = {
+            'description': forms.Textarea(
+                attrs={
+                    'placeholder': 'Enter description'
+                }
+            ),
+        }
+
+
+class EditPetPhotoForm(forms.ModelForm, BootstrapFormMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = PetPhoto
+        fields = ('description', 'tagged_pets')
+
+
+class DeletePetPhotoForm(forms.ModelForm, BootstrapFormMixin, DisabledFieldsFormMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self._init_disabled_fields()
+
+    def save(self, commit=True):
+        if commit:
+            # deletes the model
+            self.instance.delete()
+            # deletes img file
+            image_path = self.instance.photo.path
+            os.remove(image_path)
+            return self.instance
+
+    class Meta:
+        model = PetPhoto
+        fields = ('description', 'tagged_pets')
+
