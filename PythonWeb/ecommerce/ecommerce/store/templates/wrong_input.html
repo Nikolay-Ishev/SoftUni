@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<div class="container mb-5 mt-2">
+    <div class="jumbotron">
+        <img style="width: 100%"
+             src="https://peaceinsight.s3.amazonaws.com/media/images/OUT_NOW_2.2e16d0ba.fill-1440x500.png"
+             alt="image not found">
+        <div class="position-sticky">
+            <h1 class="display-4">Wrong input</h1>
+            <p class="lead">Please make sure all fields are filled in correctly</p>
+            <hr>
+            <div class="row col-lg-6">
+
+                <!-- Button to show when profile is NOT created -->
+                <a href="{% url 'checkout' %}" class="btn btn-lg btn-secondary">Checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
