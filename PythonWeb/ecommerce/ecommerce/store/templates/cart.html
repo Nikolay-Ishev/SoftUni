@@ -14,7 +14,7 @@
                         <th><h5>Items: <strong>{{ order.cart_total_items_count }}</strong></h5></th>
                         <th><h5>Total:<strong> {{order.cart_total_sum|floatformat:2}} лв.</strong></h5></th>
                         <th>
-							<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+							<a  style="float:right; margin:5px;" class="btn btn-warning" href="{% url 'checkout' %}">Checkout</a>
 						</th>
 					</tr>
 				</table>

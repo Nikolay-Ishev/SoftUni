@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'ecommerce.store',
+    'ecommerce.registration',
+
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

@@ -29,6 +29,7 @@ class Customer(models.Model):
     )
     email = models.EmailField(
         max_length=EMAIL_MAX_LENGTH,
+        unique=True,
     )
 
     def __str__(self):
@@ -72,19 +73,21 @@ class ShippingAddress(models.Model):
 
     customer = models.OneToOneField(
         Customer,
-        on_delete=models.SET_NULL,
-        null=True,
+        on_delete=models.CASCADE,
     )
     address = models.CharField(
         max_length=ADDRESS_MAX_LENGTH,
+        null=True,
     )
     city = models.CharField(
         max_length=CITY_MAX_LENGTH,
+        null=True,
     )
     zipcode = models.PositiveIntegerField(
         validators=(
             MaxValueValidator(MAX_ZIPCODE),
         ),
+        null=True
     )
     date_added = models.DateTimeField(
         auto_now_add=True,

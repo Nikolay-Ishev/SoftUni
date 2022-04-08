@@ -1,6 +1,7 @@
 import datetime
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
@@ -14,7 +15,7 @@ from .helpers import cookie_cart, delete_cookie
 def store(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
     else:
         cookie_data = cookie_cart(request)
         order = cookie_data['order']
@@ -30,7 +31,7 @@ def store(request):
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
         items = order.orderitem_set.all()
     else:
         cookie_data = cookie_cart(request)
@@ -47,9 +48,10 @@ def checkout(request):
     customer_form = CreateCustomerForm()
     address_form = CreateAddressForm()
 
+    # authenticated user checkout
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
         items = order.orderitem_set.all()
 
         # loop through order items and check if a product has already been sold before checking out
@@ -73,7 +75,6 @@ def checkout(request):
             if address_form.is_valid() and customer_form.is_valid():
                 transaction_id = datetime.datetime.now().timestamp()
                 order.transaction_id = transaction_id
-                order.complete = True
                 address_form.save()
                 customer_form.save()
                 order.shipping_address = customer.shippingaddress
@@ -91,6 +92,7 @@ def checkout(request):
                 address_form = CreateAddressForm()
             customer_form = CreateCustomerForm(instance=customer)
 
+    # anonymous user checkout
     else:
         cookie_data = cookie_cart(request)
         order = cookie_data['order']
@@ -101,11 +103,14 @@ def checkout(request):
             if not items:
                 return redirect('checkout empty cart')
 
-            customer_form = CreateCustomerForm(request.POST)
-            address_form = CreateAddressForm(request.POST)
-            print(customer_form.is_valid())
-            print(address_form.is_valid())
+            # check if customer with the provided email already exists in the database before creating a form
+            try:
+                customer = Customer.objects.get(email=request.POST['email'])
+                customer_form = CreateCustomerForm(request.POST, instance=customer)
+            except ObjectDoesNotExist:
+                customer_form = CreateCustomerForm(request.POST)
 
+            address_form = CreateAddressForm(request.POST)
 
             if address_form.is_valid() and customer_form.is_valid():
 
@@ -133,8 +138,6 @@ def checkout(request):
                     shipping_address=address,
                     complete=False
                 )
-                transaction_id = datetime.datetime.now().timestamp()
-                order.transaction_id = transaction_id
 
                 for item in items:
                     product = Product.objects.get(id=item['product']['id'])
@@ -145,9 +148,14 @@ def checkout(request):
                     )
                     order_item.save()
 
-                order.complete = True
+                transaction_id = datetime.datetime.now().timestamp()
+                order.transaction_id = transaction_id
+
                 order.save()
                 return delete_cookie('cart', 'order completed')
+
+            else:
+                return redirect('wrong input')
 
     context = {
         'address_form': address_form,
@@ -165,7 +173,7 @@ def update_item(request):
 
     customer = request.user.customer
     product = Product.objects.get(id=product_id)
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
     order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
 
     if action == 'add' and product.in_stock != 'Sold':
