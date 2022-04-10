@@ -25,8 +25,26 @@ h1,h2,h3,h4,h5,h6{
 	border-radius: 0 0 4px 4px;
 }
 
+.btn-custom {
+	outline: none;
+    background-color: #4f868c;
+}
+.dropdown-menu-custom{
+	margin-top: 15px;
+}
+
+.dropdown-item:focus {
+    background-color: #4f868c !important;
+}
+
 .bg-dark{
 	background-color: #4f868c!important;
+}
+
+#acc-icon{
+	width:25px;
+	display: inline-block;
+	margin-left: 15px;
 }
 
 #cart-icon{

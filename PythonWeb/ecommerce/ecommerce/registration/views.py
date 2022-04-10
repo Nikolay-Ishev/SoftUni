@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, \
+    PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -18,6 +19,36 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('store')
+
+
+'''
+1 - Submit email form - PasswordResetView
+2 - Email sent success message - PasswordResetDoneView
+3 - Link to password reset from email - PasswordResetConfirmView
+4 - Password successfully changed message - PasswordResetCompleteView
+
+'''
+
+
+class ResetUserPasswordView(PasswordResetView):
+    template_name = 'reset_password.html'
+
+
+class ResetUserPasswordDoneView(PasswordResetDoneView):
+    template_name = 'reset_password_email_sent.html'
+
+
+class ResetUserPasswordConfirmView(PasswordResetConfirmView):
+    template_name = 'reset_password_confirm.html'
+
+
+class ResetUserPasswordCompleteView(PasswordResetCompleteView):
+    template_name = 'reset_password_done.html'
+
+
+class ChangeUserPasswordView(PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = reverse_lazy("registration completed")
 
 
 def registration_completed(request):
@@ -49,6 +80,8 @@ def register(request):
             customer = customer_form.save(commit=False)
             customer.user = user
             customer.save()
+            user.email = customer.email
+            user.save()
             login(request, user)
             return redirect('registration completed')
         else:
@@ -64,3 +97,7 @@ def register(request):
     }
 
     return render(request, 'register.html', context)
+
+
+def terms(request):
+    return render(request, 'terms.html')

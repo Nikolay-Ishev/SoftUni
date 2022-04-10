@@ -17,9 +17,13 @@
 
                             <input class="btn btn-warning btn-block" type="submit" value="Login">
 
+                            <hr>
 
-                            <p class="small mb-0 text-center">Don't have account? <a href="{% url 'register' %}">Create an account</a></p>
+                            <p class="small text-center">Don't have account?
+                                <a href="{% url 'register' %}">Create an account</a></p>
 
+                            <p class="small mb-0 text-center">Forgot your password?
+                                <a href="{% url 'reset_password' %}">Click here</a></p>
                         </form>
 
                     </div>

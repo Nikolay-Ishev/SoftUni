@@ -203,3 +203,4 @@ def order_completed(request):
 
 def checkout_emtpy_cart(request):
     return render(request, "checkout_empty_cart.html")
+
