@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="en" class="html">
+
 <head>
     <meta charset="UTF-8">
     <title>Ecom</title>
@@ -16,9 +17,10 @@
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
 </head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="{% url 'store' %}">Ecom</a>
+
+<body class="pt-5">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="{% url 'store' %}">My floral bag</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
@@ -26,10 +28,10 @@
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
-	      <li class="nav-item active">
-	        <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
-	      </li>
-
+{#	      <li class="nav-item active">#}
+{#	        <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>#}
+{#	      </li>#}
+{##}
 {#	      <li class="nav-item">#}
 {#	        <a class="nav-link" href="#">Link</a>#}
 {#	      </li>#}
@@ -55,11 +57,15 @@
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
                     <a class="dropdown-item" href="{% url 'change password' %}">Change password</a>
                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    <hr>
+                    <a class="dropdown-item" href="{% url 'delete user' %}"
+                       onclick="return confirm(`This action will permanently delete your profile`)">
+                        Delete profile</a>
                   </div>
                 </div>
 
             {% else %}
-	     	    <a href="{% url 'login' %}" class="btn btn-warning">Login</a>
+	     	    <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
             {% endif %}
 
 	     	<a href="{% url 'cart' %}">
@@ -77,11 +83,51 @@
 	  </div>
 	</nav>
 
-    <div class="container">
+    <div class="container" style="margin-bottom: 200px">
         {% block content %}
         {% endblock %}
     </div>
 
+    <footer class="section-footer" style="background-color: white">
+        <div class="container-fluid text-center text-md-left">
+            <div class="row mb-4">
+                <div class="col-md-6 col-sm-3 col-xs-4">
+                    <div class="footer-text pull-left">
+                        <div class="d-flex">
+                            <h1 class="font-weight-bold mr-2 px-3 ml-1" style="background-color:#4f868c">
+                                <a style="color: white" class="text-decoration-none"
+                                   href="https://www.facebook.com/%D0%9F%D1%8A%D1%81%D1%82%D1%80%D0%BE%D0%A6%D0%B2%D0%B5%D1%
+                                   82%D0%B8%D1%8F-380865935805441/?ref=page_internal">My</a>
+                            </h1>
+                            <h1><a style="color: #4f868c" class="text-decoration-none"
+                                   href="https://www.facebook.com/%D0%9F%D1%8A%D1%81%D1%82%D1%80%D0%BE%D0%A6%D0%B2%D0%B5%D1%
+                                   82%D0%B8%D1%8F-380865935805441/?ref=page_internal" >floral bag</a>
+                            </h1>
+                        </div>
+                        <p class="card-text ml-3" style="color: #4f868c">If you like the products presented in this website feel
+                            free to take a look at the facebook page of their creator.</p>
+                        <p class="card-text ml-3" style="color: #4f868c">You can make a real order there. Just click on the logo
+                                        above this text.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-2 col-xs-2">
+                    <div class="footer-text float-right">
+                        <h5 style="color: #4f868c" class="mt-4">Created by Nikolay Ishev</h5>
+                        <div class="footer-text float-right mt-4">
+                            <h6><a style="color: #4f868c" class="text-decoration-none"
+                                       href="https://github.com/Nikolay-Ishev" >Github</a>
+                            </h6>
+                            <h6><a style="color: #4f868c" class="text-decoration-none"
+                                       href="https://www.linkedin.com/in/nikolay-ishev-231a21175/" >LinkedIn</a>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity=
             "sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -92,4 +138,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity=
             "sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
+
 </html>

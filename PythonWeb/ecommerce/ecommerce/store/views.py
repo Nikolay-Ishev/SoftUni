@@ -4,6 +4,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.views.generic import TemplateView, DetailView
 
 from .forms import CreateCustomerForm, CreateAddressForm
 from .models import *
@@ -11,37 +12,65 @@ from .helpers import cookie_cart, delete_cookie
 
 
 # Create your views here.
+class ProductDetails(DetailView):
+    template_name = 'details.html'
+    context_object_name = 'product'
+    model = Product
 
-def store(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetails, self).get_context_data(**kwargs)
 
-    products = Product.objects.all()
-    context = {
-        'products': products,
-        'order': order,
-    }
-    return render(request, 'store.html', context)
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
+        else:
+            cookie_data = cookie_cart(self.request)
+            order = cookie_data['order']
+
+        context['order'] = order
+        return context
 
 
-def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
-        items = order.orderitem_set.all()
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
-        items = cookie_data['items']
-    context = {
-        'items': items,
-        'order': order,
-    }
-    return render(request, 'cart.html', context)
+class Store(TemplateView):
+    template_name = 'store.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
+        else:
+            cookie_data = cookie_cart(self.request)
+            order = cookie_data['order']
+
+        products = Product.objects.exclude(in_stock="Sold")
+        context = {
+            'products': products,
+            'order': order,
+        }
+        return context
+
+
+class Cart(TemplateView):
+    template_name = 'cart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            customer = self.request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, transaction_id=None)
+            items = order.orderitem_set.all()
+        else:
+            cookie_data = cookie_cart(self.request)
+            order = cookie_data['order']
+            items = cookie_data['items']
+        context = {
+            'items': items,
+            'order': order,
+        }
+        return context
 
 
 def checkout(request):
@@ -77,6 +106,8 @@ def checkout(request):
                 order.transaction_id = transaction_id
                 address_form.save()
                 customer_form.save()
+                customer.user.email = customer.email
+                customer.save()
                 order.shipping_address = customer.shippingaddress
                 order.save()
                 return redirect('order completed')

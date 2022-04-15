@@ -1,10 +1,12 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.generic import DeleteView
 
 from ecommerce.store.forms import CreateCustomerForm
 from ecommerce.store.models import Customer
@@ -101,3 +103,9 @@ def register(request):
 
 def terms(request):
     return render(request, 'terms.html')
+
+
+def delete(request):
+    request.user.delete()
+    logout(request)
+    return redirect('store')

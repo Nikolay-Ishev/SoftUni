@@ -34,5 +34,10 @@ if (cart === null) {
     console.log('Cart was created...')
 }
 
-console.log('Cart:', cart)
+
+let footer = document.querySelector('footer')
+console.log(footer)
+
+
+
 

@@ -38,6 +38,17 @@ class Customer(models.Model):
 
 class Product(models.Model):
     NAME_MAX_LENGTH = 120
+    MATERIAL_MAX_LENGTH = 32
+    SIZE_MAX_LENGTH = 32
+    DECORATION_MAX_LENGTH = 32
+    WASHABLE_MAX_LENGTH = 32
+    STRAPS_MAX_LENGTH = 120
+
+    MATERIAL_DEFAULT = "100% cotton"
+    SIZE_DEFAULT = "36 / 40 cm"
+    DECORATION_DEFAULT = "Handmade"
+    WASHABLE_DEFAULT = "30 °C"
+    STRAPS_DEFAULT = "Long straps suitable for carrying by hand or over the shoulder"
 
     UNIQUE = 'Unique'
     MULTIPLE = 'Multiple'
@@ -59,6 +70,26 @@ class Product(models.Model):
     image = models.ImageField(
         null=True,
         blank=True,
+    )
+    material = models.CharField(
+        default=MATERIAL_DEFAULT,
+        max_length=MATERIAL_MAX_LENGTH
+    )
+    size = models.CharField(
+        default=SIZE_DEFAULT,
+        max_length=SIZE_MAX_LENGTH
+    )
+    decoration = models.CharField(
+        default=DECORATION_DEFAULT,
+        max_length=DECORATION_MAX_LENGTH
+    )
+    washable = models.CharField(
+        default=WASHABLE_DEFAULT,
+        max_length=WASHABLE_MAX_LENGTH
+    )
+    straps = models.TextField(
+        default=STRAPS_DEFAULT,
+        max_length=STRAPS_MAX_LENGTH
     )
 
     def __str__(self):
