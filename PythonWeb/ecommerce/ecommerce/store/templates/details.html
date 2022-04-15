@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+     <div class="row">
+		<div class="col-lg-6">
+			<img class="details-img"  src="{{product.image.url}}" alt="No image available">
+
+		</div>
+
+		<div class="col-lg-6">
+			<div class="box-element">
+
+				<a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back to Store</a>
+				<hr>
+				<h3>{{ product.name }}</h3>
+				<hr>
+
+				<h3 style="color: #4f868c">{{product.price|floatformat:2}} лв.</h3>
+                <ul class="description">
+                    <li style="color: #4f868c">{{ product.material }}</li>
+                    <li style="color: #4f868c">{{ product.size }}</li>
+                    <li style="color: #4f868c">{{ product.decoration }}</li>
+                    <li style="color: #4f868c">{{ product.washable }}</li>
+                    <li style="color: #4f868c">{{ product.straps }}</li>
+                </ul>
+                <button data-product={{ product.id }} data-type={{ product.in_stock  }} data-action="add"
+                        class="btn btn-outline-dark add-btn update-cart">Add to Cart</button>
+
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{% static 'js/updateItem.js' %}"></script>
+{% endblock %}
