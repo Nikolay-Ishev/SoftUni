@@ -86,8 +86,6 @@ def register(request):
             user.save()
             login(request, user)
             return redirect('registration completed')
-        else:
-            return redirect('wrong input')
 
     else:
         customer_form = CreateCustomerForm()

@@ -1,4 +1,6 @@
 {% extends 'main.html' %}
+{% load crispy_forms_filters %}
+
 {% load static %}
 {% block content %}
      <div class="row">
@@ -8,34 +10,14 @@
                     {% csrf_token %}
 					<div id="user-info">
                         <p>Personal Information:</p>
-						<div class="form-field">
-                            {{ customer_form.first_name }}
-						</div>
-                        <div class="form-field">
-                            {{ customer_form.last_name }}
-						</div>
-                        <div class="form-field">
-                            {{ customer_form.phone_number }}
-						</div>
-                        <div class="form-field">
-                            {{ customer_form.email }}
-                        </div>
-
+                        {{ customer_form|crispy }}
 					</div>
 
 					<div id="shipping-info">
 						<hr>
 						<p>Shipping Information:</p>
 						<hr>
-                        <div class="form-field">
-                            {{ address_form.city }}
-						</div>
-                        <div class="form-field">
-                            {{ address_form.zipcode }}
-						</div>
-                        <div class="form-field-large">
-                            {{ address_form.address }}
-						</div>
+                        {{ address_form|crispy }}
 					</div>
 
 					<hr>

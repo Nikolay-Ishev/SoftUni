@@ -111,8 +111,6 @@ def checkout(request):
                 order.shipping_address = customer.shippingaddress
                 order.save()
                 return redirect('order completed')
-            else:
-                return redirect('wrong input')
 
         # visualise the user data in the form if the request is GET
         else:
@@ -184,9 +182,6 @@ def checkout(request):
 
                 order.save()
                 return delete_cookie('cart', 'order completed')
-
-            else:
-                return redirect('wrong input')
 
     context = {
         'address_form': address_form,
