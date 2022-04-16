@@ -3,8 +3,11 @@
 {% block content %}
      <div class="row">
 		<div class="col-lg-6">
-			<img class="details-img"  src="{{product.image.url}}" alt="No image available">
-
+            {% if product.image %}
+			    <img class="details-img"  src="{{product.image.url}}" alt="No image available">
+            {% else %}
+	            <img class="details-img" src="{% static 'images/placeholder.png' %}" alt="No image available">
+            {% endif %}
 		</div>
 
 		<div class="col-lg-6">

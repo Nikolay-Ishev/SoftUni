@@ -170,6 +170,9 @@ def checkout(request):
 
                 for item in items:
                     product = Product.objects.get(id=item['product']['id'])
+                    if product.in_stock == 'Sold':
+                        order.delete()
+                        return delete_cookie('cart', 'already sold')
                     order_item = OrderItem.objects.create(
                         product=product,
                         order=order,
@@ -219,8 +222,8 @@ def update_item(request):
     return JsonResponse('Item was added', safe=False)
 
 
-def wrong_input(request):
-    return render(request, 'wrong_input.html')
+def already_sold(request):
+    return render(request, 'product_already_sold.html')
 
 
 def order_completed(request):
