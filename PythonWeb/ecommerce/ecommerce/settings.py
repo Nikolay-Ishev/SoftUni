@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'ecommerce.registration',
 
     'crispy_forms',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [

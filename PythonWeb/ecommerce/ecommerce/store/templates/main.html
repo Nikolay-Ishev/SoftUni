@@ -31,22 +31,9 @@
 {#	      <li class="nav-item active">#}
 {#	        <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>#}
 {#	      </li>#}
-{##}
-{#	      <li class="nav-item">#}
-{#	        <a class="nav-link" href="#">Link</a>#}
-{#	      </li>#}
-{#	      <li class="nav-item">#}
-{#	        <a class="nav-link disabled" href="#">Disabled</a>#}
-{#	      </li>#}
-
 	    </ul>
-          
-{#	    <form class="form-inline my-2 my-lg-0">#}
-{#	      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
-{#	      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
-{#	    </form>#}
-          
-	    <div class="form-inline my-2 my-lg-0">
+
+	    <div class="form-inline my-2 my-lg-0 navbar-end">
             {% if request.user.is_authenticated %}
 
                 <div class="dropdown open">
@@ -92,9 +79,9 @@
         <div class="container-fluid text-center text-md-left">
             <div class="row mb-4">
                 <div class="col-md-6 col-sm-3 col-xs-4">
-                    <div class="footer-text pull-left">
+                    <div class="footer-text pull-left navbar-brand">
                         <div class="d-flex">
-                            <h1 class="font-weight-bold mr-2 px-3 ml-1" style="background-color:#4f868c">
+                            <h1 class="font-weight-bold mr-2 px-3" style="background-color:#4f868c">
                                 <a style="color: white" class="text-decoration-none"
                                    href="https://www.facebook.com/%D0%9F%D1%8A%D1%81%D1%82%D1%80%D0%BE%D0%A6%D0%B2%D0%B5%D1%
                                    82%D0%B8%D1%8F-380865935805441/?ref=page_internal">My</a>
@@ -104,15 +91,15 @@
                                    82%D0%B8%D1%8F-380865935805441/?ref=page_internal" >floral bag</a>
                             </h1>
                         </div>
-                        <p class="card-text ml-3" style="color: #4f868c">If you like the products presented here feel
+                        <p class="card-text" style="color: #4f868c;font-size: medium;">If you like the products presented here feel
                             free to take a look at the facebook page of their creator.</p>
-                        <p class="card-text ml-3" style="color: #4f868c">You can make a real order there. Just click on the logo
+                        <p class="card-text" style="color: #4f868c;font-size: medium">You can make a real order there. Just click on the logo
                                         above this text.</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-sm-2 col-xs-2">
-                    <div class="footer-text float-right">
+                    <div class="footer-text float-right navbar-end">
                         <h5 style="color: #4f868c" class="mt-4">This website is created by Nikolay Ishev</h5>
                         <div class="footer-text float-right mt-4">
                             <h6><a style="color: #4f868c" class="text-decoration-none"

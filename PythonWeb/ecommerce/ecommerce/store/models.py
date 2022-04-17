@@ -71,6 +71,14 @@ class Product(models.Model):
         null=True,
         blank=True,
     )
+    second_image = models.ImageField(
+        null=True,
+        blank=True,
+    )
+    third_image = models.ImageField(
+        null=True,
+        blank=True,
+    )
     material = models.CharField(
         default=MATERIAL_DEFAULT,
         max_length=MATERIAL_MAX_LENGTH
