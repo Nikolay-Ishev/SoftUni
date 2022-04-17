@@ -4,7 +4,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 
 from .forms import CreateCustomerForm, CreateAddressForm
 from .models import *
@@ -31,8 +31,10 @@ class ProductDetails(DetailView):
         return context
 
 
-class Store(TemplateView):
+class Store(ListView):
     template_name = 'store.html'
+    paginate_by = 6
+    queryset = Product.objects.exclude(in_stock="Sold")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,11 +46,7 @@ class Store(TemplateView):
             cookie_data = cookie_cart(self.request)
             order = cookie_data['order']
 
-        products = Product.objects.exclude(in_stock="Sold")
-        context = {
-            'products': products,
-            'order': order,
-        }
+        context['order'] = order
         return context
 
 
@@ -66,6 +64,7 @@ class Cart(TemplateView):
             cookie_data = cookie_cart(self.request)
             order = cookie_data['order']
             items = cookie_data['items']
+
         context = {
             'items': items,
             'order': order,

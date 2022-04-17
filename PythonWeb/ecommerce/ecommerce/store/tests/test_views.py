@@ -31,12 +31,12 @@ class StoreTests(TestCase):
         response = self.client.get(reverse('store'))
         self.assertTemplateUsed(response, 'store.html')
 
-    def test_get__when_two_products_expect_context_to_contain_two_products(self):
+    def test_get__when_two_available_products_expect_context_to_contain_two_products(self):
         # Arrange
         Product.objects.bulk_create(self.PRODUCTS_TO_CREATE)
         # Act
         response = self.client.get(reverse('store'))
-        products = response.context['products']
+        products = response.context['page_obj']
         # Assert
         self.assertEqual(len(products), 2)
 

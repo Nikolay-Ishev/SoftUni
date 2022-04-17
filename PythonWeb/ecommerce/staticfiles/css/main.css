@@ -94,7 +94,8 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .row-image{
-	width: 100px;
+	width: 75px;
+	height: 100px;
 }
 
 .form-field{
@@ -153,4 +154,9 @@ h1,h2,h3,h4,h5,h6{
 	background-color: #4f868c;
 	position: absolute;
 	bottom: 0;
+}
+
+.pagination-sm > li > a
+{
+    color: dimgrey;
 }
