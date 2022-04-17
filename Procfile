@@ -1,2 +1,2 @@
-web: gunicorn --pythonpath SoftUni.PythonWeb.ecommerce.ecommerce.wsgi
+web: gunicorn --pythonpath PythonWeb.ecommerce.ecommerce.wsgi
 
