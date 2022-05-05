@@ -22,15 +22,15 @@ function getCookie(name) {
 // creates or overwrite a cookie
 // 1 Day = 24 Hrs = 24*60*60 = 86400.
 // setting age to 0 will DELETE the cookie
-function setCookie(name, value, age) {
-    document.cookie = `${name}=` + JSON.stringify(value) + ";path=/;" + `max-age=${age};`
+function setCookie(name, value) {
+    document.cookie = `${name}=` + JSON.stringify(value) + ";path=/;"
 }
 
 let cart = JSON.parse(getCookie('cart'))
 
 if (cart === null) {
     cart = {}
-    setCookie('cart', cart, 864000)
+    setCookie('cart', cart)
     console.log('Cart was created...')
 }
 

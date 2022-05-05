@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-4 mt-4 mr-5">
+            {% if match.iconUrlTeam1 %}
+                <img style="width: 100%; height: 300px;" src="{{match.iconUrlTeam1}}" alt="No image available">
+            {% endif %}
+        </div>
+        <div class="col-lg-4 mt-4 ml-5">
+            {% if match.iconUrlTeam2 %}
+                <img style="width: 100%; height: 300px;" src="{{match.iconUrlTeam2}}" alt="No image available">
+            {% endif %}
+        </div>
+	</div>
+
+    <div class="row">
+        <div class="col-lg-4 mt-4 mr-5">
+            {% if match.nameTeam1 %}
+                <p style="font-size: 200%;" class="text-center">{{match.nameTeam1}}<p/>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 mt-4 ml-5">
+            {% if match.nameTeam2 %}
+                <p style="font-size: 200%;" class="text-center">{{match.nameTeam2}}<p/>
+            {% endif %}
+        </div>
+	</div>
+
+    <div class="row">
+        <p style="margin-top: 100px; margin-left: 300px; font-size: 150%;">{{match.matchDateTimeUTC}}<p/>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+
+    {% for match in matches %}
+        <div class="row">
+            <div class="col-lg-2 mt-4">
+                {% if match.matchDateTimeUTC %}
+                    <p class="text-center">{{match.matchDateTimeUTC}}</p>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4 mt-4">
+                {% if match.nameTeam1 %}
+                    <p style="font-size: 125%;" class="text-center">{{match.nameTeam1}}</p>
+                {% endif %}
+            </div>
+
+            {% if match.matchIsFinished %}
+                {% if match.goals.Goal %}
+                    {% for goal in match.goals.Goal %}
+                        {% if forloop.last %}
+                            <div class="col-lg-1 mt-4">
+                                <p style="font-size: 150%;" class="text-center">{{ goal.goalScoreTeam1 }} : {{ goal.goalScoreTeam2 }} </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-lg-1 mt-4">
+                        <p style="font-size: 150%;" class="text-center">0 : 0</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="col-lg-1 mt-4">
+                    <p style="font-size: 150%;" class="text-center">:</p>
+                </div>
+            {% endif %}
+
+            <div class="col-lg-4 mt-4">
+                {% if match.nameTeam2 %}
+                    <p style="font-size: 125%;" class="text-center">{{match.nameTeam2}}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+    {% endfor %}
+
+
+
+{% endblock %}

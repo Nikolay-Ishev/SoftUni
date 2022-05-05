@@ -33,9 +33,9 @@ function updateAnonymousOrder(productId, inStock, action) {
             delete cart[productId]
         }
     }
-    setCookie('cart', cart, 864000)
+    setCookie('cart', cart)
     setCartTotal(cart)
-    console.log(cart)
+
 
     //check if the location is cart and reloads it in order to update the DOM, temporary solution
     if (location.href === "http://127.0.0.1:8000/cart/") {
